@@ -2,10 +2,11 @@
 #include <string>
 #include <iomanip>
 #include "main.h"
+
 using namespace std;
 
 int main() {
-    auto roster = new Player[3];
+    Player *roster = new Player[ROSTER_SIZE];
 
     loadPlayers(roster);
     displayTable(roster);
@@ -14,31 +15,14 @@ int main() {
 }
 
 void loadPlayers(Player roster[]){
-    for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < ROSTER_SIZE; i++) {
         int currentPlayer = i+1;
         cout << "Entering information for Player "<< currentPlayer << endl << endl;
         cout << "Enter the name for Player " << currentPlayer << ": ";
         getline(cin, roster[i].name);
 
-        bool validPlayerNumber = false;
-        while(!validPlayerNumber){
-            cout << "Enter the number for Player " << currentPlayer << ": ";
-            cin >> roster[i].number;
-
-            if(roster[i].number >= 0){
-               validPlayerNumber = true;
-            }
-        }
-
-        bool validPointScored = false;
-        while(!validPointScored){
-            cout << "Enter the total points scored for Player " << currentPlayer << ": ";
-            cin >> roster[i].totalPoints;
-
-            if(roster[i].totalPoints >= 0){
-                validPointScored = true;
-            }
-        }
+        roster[i].number = getValidPlayerNumber(currentPlayer);
+        roster[i].totalPoints = getValidPointScored(currentPlayer);
 
         cin.ignore(INT_MAX, '\n');
         cout << endl;
@@ -55,22 +39,22 @@ void displayTable(Player roster[]){
 void displayHeader(){
     cout << right << setw(20) << "Player Name" <<  setw(20) << "Player Number" << setw(20) << "Total Points" << endl;
     cout << "=================================================================" << endl;
-};
+}
 
 void displayRoster(Player roster[]){
-    for(int i = 0; i < 3; i++) {
-        displayPlayer(roster[i]);
+    for(int i = 0; i < ROSTER_SIZE; i++) {
+        displayPlayer(&roster[i]);
     }
     cout << endl;
-};
+}
 
-void displayPlayer(Player thisPlayer){
-    cout << right << setw(20) << thisPlayer.name <<  setw(20) << thisPlayer.number << setw(20) << thisPlayer.totalPoints << endl;
-};
+void displayPlayer(Player *thisPlayer){
+    cout << right << setw(20) << thisPlayer->name <<  setw(20) << thisPlayer->number << setw(20) << thisPlayer->totalPoints << endl;
+}
 
 void displayTeamStats(Player roster[]){
     int teamTotal = 0;
-    for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < ROSTER_SIZE; i++) {
         teamTotal += roster[i].totalPoints;
     }
 
@@ -79,13 +63,32 @@ void displayTeamStats(Player roster[]){
 
 void displayTopPerformer(Player roster[]){
     int topPerformerIndex = 0;
-    for(int i = 1; i < 3; i++) {
+    for(int i = 1; i < ROSTER_SIZE; i++) {
         topPerformerIndex = roster[topPerformerIndex].totalPoints > roster[i].totalPoints ? topPerformerIndex : i;
     }
 
     cout << "Top Performer: " << roster[topPerformerIndex].name << " wearing jersey #" << roster[topPerformerIndex].number << endl;
-};
+}
 
+int getValidPointScored(int currentPlayer) {
+    int pointScored = -1;
+    while(pointScored < 0){
+        cout << "Enter the total points scored for Player " << currentPlayer << ": ";
+        cin >> pointScored;
+    }
+
+    return pointScored;
+}
+
+int getValidPlayerNumber(int currentPlayer) {
+    int playerNumber = -1;
+    while(playerNumber < 0){
+        cout << "Enter the number for Player " << currentPlayer << ": ";
+        cin >> playerNumber;
+    }
+
+    return playerNumber;
+}
 
 /*
 Entering information for Player 1

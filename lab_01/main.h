@@ -9,7 +9,7 @@ struct Player {
     Player(){
         name = "";
         number = -1;
-        totalPoints = 0;
+        totalPoints = -1;
     }
 
     std::string name;
@@ -17,13 +17,18 @@ struct Player {
     int totalPoints;
 };
 
+const int ROSTER_SIZE = 3;
+
 void loadPlayers(Player[]);
 void displayTable(Player[]);
+
 void displayHeader();
 void displayRoster(Player[]);
-void displayPlayer(Player);
+void displayPlayer(Player*);
 void displayTeamStats(Player[]);
 void displayTopPerformer(Player[]);
 
+int getValidPlayerNumber(int);
+int getValidPointScored(int);
 
 #endif //LAB_01_MAIN_H
